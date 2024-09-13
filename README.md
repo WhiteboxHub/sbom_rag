@@ -1,87 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3rd Party Software Security Management</title>
+</head>
+<body>
 
-# 3rd Party Software Security Management
+<h1>3rd Party Software Security Management</h1>
 
-## Table of Contents
-- [Overview](#overview)
-- [Features](#features)
-- [Technologies Used](#technologies-used)
-- [Prerequisites](#prerequisites)
-- [Installation](#installation)
-- [File Structure](#file-structure)
-- [API Endpoints](#api-endpoints)
-  - [Analyzing SBOM for Vulnerabilities](#analyzing-sbom-for-vulnerabilities)
-  - [Assessing Vulnerabilities by CVE ID](#assessing-vulnerabilities-by-cve-id)
+<h2>Table of Contents</h2>
+<ul>
+    <li><a href="#overview">Overview</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#technologies-used">Technologies Used</a></li>
+    <li><a href="#prerequisites">Prerequisites</a></li>
+    <li><a href="#installation">Installation</a></li>
+    <li><a href="#file-structure">File Structure</a></li>
+    <li><a href="#api-endpoints">API Endpoints</a></li>
+    <li><a href="#analyzing-sbom-for-vulnerabilities">Analyzing SBOM for Vulnerabilities</a></li>
+    <li><a href="#assessing-vulnerabilities-by-cve-id">Assessing Vulnerabilities by CVE ID</a></li>
+</ul>
 
+<h2 id="overview">Overview</h2>
+<p>This system is designed to demonstrate the following workflows:</p>
+<ul>
+    <li>SBOM Request and Delivery</li>
+    <li>Vulnerability Remediation Request and Response</li>
+    <li>Continuous Monitoring and Risk Assessment</li>
+</ul>
+<p>The system is implemented using Python and leverages open-source libraries and frameworks such as FastAPI, Hugging Face Transformers, and LangChain.</p>
 
-## Overview
+<h2 id="features">Features</h2>
+<ul>
+    <li>Generate SBOMs for packages and Docker images.</li>
+    <li>Analyze SBOM artifacts for vulnerabilities using the NVD API.</li>
+    <li>Manage vendors, products, vulnerabilities, and fixes via API.</li>
+    <li>Support for PostgreSQL database to store SBOM-related data.</li>
+</ul>
 
-This system is designed to demonstrate the following workflows:
+<h2 id="technologies-used">Technologies Used</h2>
+<ul>
+    <li><strong>FastAPI</strong>: For building APIs for Agents.</li>
+    <li><strong>SQLAlchemy</strong>: ORM for database interactions.</li>
+    <li><strong>PostgreSQL</strong>: Relational database for data storage.</li>
+    <li><strong>NVD API</strong>: National Vulnerability Database API for querying vulnerabilities.</li>
+    <li><strong>Pydantic</strong>: For data validation and parsing in FastAPI.</li>
+    <li><strong>Syft</strong>: For SBOM generation and analysis.</li>
+    <li><strong>Docker</strong>: For containerization.</li>
+    <li><strong>PGAdmin</strong>: For database management.</li>
+    <li><strong>pgvector</strong>: For database vector embeddings of vulnerabilities knowledgebase.</li>
+</ul>
 
-SBOM Request and Delivery Vulnerability Remediation Request and Response Continuous Monitoring and Risk Assessment The system is implemented using Python and leverages open-source libraries and frameworks such as FastAPI, Hugging Face Transformers, and LangChain.
+<h2 id="prerequisites">Prerequisites</h2>
+<ol>
+    <li><strong>Python 3.8+</strong></li>
+    <li><strong>PostgreSQL</strong> installed and running in Docker container.</li>
+    <li><strong>Docker</strong> For creating container for every Agent.</li>
+    <li><strong>Syft</strong>: Installed for SBOM generation.</li>
+    <li><strong>pip</strong> for package Installations.</li>
+</ol>
 
-## Features
-
-- Generate SBOMs for packages and Docker images.
-- Analyze SBOM artifacts for vulnerabilities using the NVD API.
-- Manage vendors, products, vulnerabilities, and fixes via API.
-- Support for PostgreSQL database to store SBOM-related data.
-
-## Technologies Used
-
-- **FastAPI**: For building APIs for Agents.
-- **SQLAlchemy**: ORM for database interactions.
-- **PostgreSQL**: Relational database for data storage.
-- **NVD API**: National Vulnerability Database API for querying vulnerabilities.
-- **Pydantic**: For data validation and parsing in FastAPI.
-- **Syft**: For SBOM generation and analysis.
-- **Docker**: For containerization.
-- **PGAdmin**: For database management.
-- **pgvector**: For database vector embeddings of vulnerabilities knowlegebase.
-
-## Prerequisites
-
-1. **Python 3.8+**
-2. **PostgreSQL** installed and running in Docker container.
-3. **Docker** For creating container for every Agent.
-4. **Syft**: Installed for SBOM generation.
-5. **pip** for package Installations.
-
-## Installation
-
-1. **Clone the repository:**
-    ```bash
-    git clone https://github.com/yourusername/your-repo.git
-    cd your-repo
-    ```
-
-
-
-1. **Setup pgadmin:**
-
-```
-docker pull dpage/pgadmin4
-
-docker run --name pgadmin-container -p 5050:80 -e PGADMIN_DEFAULT_EMAIL=user@domain.com -e PGADMIN_DEFAULT_PASSWORD=password -d dpage/pgadmin4
-```
-2. **Setup pgvector:**
-
-```
-docker pull pgvector/pgvector:pg16
-
+<h2 id="installation">Installation</h2>
+<ol>
+    <li><strong>Clone the repository:</strong>
+        <pre><code>git clone https://github.com/yourusername/your-repo.git
+cd your-repo</code></pre>
+    </li>
+    <li><strong>Setup pgadmin:</strong>
+        <pre><code>docker pull dpage/pgadmin4
+docker run --name pgadmin-container -p 5050:80 -e PGADMIN_DEFAULT_EMAIL=user@domain.com -e PGADMIN_DEFAULT_PASSWORD=password -d dpage/pgadmin4</code></pre>
+    </li>
+    <li><strong>Setup pgvector:</strong>
+        <pre><code>docker pull pgvector/pgvector:pg16
 docker volume create pgvector-data
+docker run --name pgvector-container -e POSTGRES_PASSWORD=password -p 5432:5432 -v pgvector-data:/var/lib/postgresql/data -d pgvector/pgvector:pg16</code></pre>
+    </li>
+</ol>
 
-docker run --name pgvector-container -e POSTGRES_PASSWORD=password -p 5432:5432 -v pgvector-data:/var/lib/postgresql/data -d pgvector/pgvector:pg16
-```
-
-## File Structure
-
-```plaintext
+<h2 id="file-structure">File Structure</h2>
+<pre>
 Here's a detailed file structure of the project:
-
-
 ├── BuyerAgent/
 │   ├── BuyerAgent.py
-    ├── create_pgsqltables.py
+├── create_pgsqltables.py
 │   ├── Dockerfile
 │   └── requirements.txt
 ├── fixAgent/
@@ -112,122 +115,103 @@ Here's a detailed file structure of the project:
     ├── log4j-web-2.3.2-javadoc.jar
     ├── openssl-1_1_1.jar
     └── poi-5.3.0.jar
+    └── README.md
+</pre>
 
-└── README.md
-```
+<h2 id="api-endpoints">API Endpoints</h2>
 
-**how to run the code**
+<h3>BuyerAgent</h3>
+<ul>
+    <li><strong>Request SBOM: BuyerAgent</strong>
+        <ul>
+            <li>Buyers send a request with a product_id to the <code>/request_sbom/</code> endpoint.</li>
+            <li>The API forwards this request to the Integration Agent.</li>
+            <li>The Integration Agent retrieves the SBOM from the Vendor API.</li>
+            <li>The SBOM is then sent back to the buyer.</li>
+        </ul>
+    </li>
+    <li><strong>Assess SBOM Risk:</strong>
+        <ul>
+            <li>Buyers send SBOM data to the <code>/assess_sbom_risk/</code> endpoint.</li>
+            <li>The API forwards the SBOM data to the Integration Agent.</li>
+            <li>The Integration Agent uses the Security Agent API to evaluate the risk.</li>
+            <li>The risk assessment results are returned to the buyer.</li>
+        </ul>
+    </li>
+</ul>
 
+<h3>IntegrationAgent</h3>
+<ul>
+    <li><strong>Check API Status:</strong>
+        <ul>
+            <li><strong>Endpoint:</strong> <code>/</code></li>
+            <li><strong>Function:</strong> Returns a simple message greet to confirm the API is working.</li>
+        </ul>
+    </li>
+    <li><strong>Get SBOM:</strong>
+        <ul>
+            <li><strong>Endpoint:</strong> <code>/get_sbom</code></li>
+            <li><strong>Function:</strong> Receives a request with a product_id and forwards it to the Vendor API to retrieve the SBOM. Returns the response from the Vendor API.</li>
+        </ul>
+    </li>
+    <li><strong>Access SBOM:</strong>
+        <ul>
+            <li><strong>Endpoint:</strong> <code>/acess_sbom</code></li>
+            <li><strong>Function:</strong> Receives SBOM JSON data from the buyer and forwards it to the Security API for vulnerability analysis. Returns the analysis results from the Security API.</li>
+        </ul>
+    </li>
+</ul>
 
+<h3>VendorAgent</h3>
+<p>Here's a breakdown of how the FastAPI application works:</p>
+<ul>
+    <li><strong>Generate SBOM:</strong>
+        <ul>
+            <li><strong>Endpoint:</strong> <code>/generate-sbom/</code></li>
+            <li><strong>Function:</strong> Generates a Software Bill of Materials (SBOM) for a specific JAR file based on the product_id provided.</li>
+            <li><strong>Process:</strong>
+                <ul>
+                    <li>Receives a product_id in the request.</li>
+                    <li>Maps product_id to a specific JAR file path.</li>
+                    <li>Checks if the file exists at the specified location.</li>
+                    <li>Calls the <code>generate_sbom()</code> function to generate the SBOM using the syft tool.</li>
+                    <li>Returns the generated SBOM as a JSON response.</li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+</ul>
 
+<h3>SecurityAgent</h3>
+<ul>
+    <li><strong>Analyze SBOM:</strong>
+        <ul>
+            <li><strong>Endpoint:</strong> <code>/analyze-sbom</code></li>
+            <li><strong>Function:</strong> Analyze the provided SBOM JSON to identify vulnerabilities.</li>
+        </ul>
+    </li>
+    <li><strong>Assess Vulnerability:</strong>
+        <ul>
+            <li><strong>Endpoint:</strong> <code>/assess-vulnerability</code></li>
+            <li><strong>Function:</strong> Assess vulnerabilities based on CVE IDs.</li>
+        </ul>
+    </li>
+</ul>
 
-## BuyerAgent
+<h2 id="analyzing-sbom-for-vulnerabilities">Analyzing SBOM for Vulnerabilities</h2>
+<ol>
+    <li>The SBOM data is provided by the user.</li>
+    <li>The data is sent to the <code>/analyze-sbom</code> endpoint of the Security API.</li>
+    <li>The Security API uses NVD data to identify potential vulnerabilities in the SBOM.</li>
+</ol>
 
-- **Request SBOM: BuyerAgent**
-  - Buyers send a request with a product_id to the /request_sbom/ endpoint.
-  - The API forwards this request to the Integration Agent.
-  - The Integration Agent retrieves the SBOM from the Vendor API.
-  - The SBOM is then sent back to the buyer.
+<h2 id="assessing-vulnerabilities-by-cve-id">Assessing Vulnerabilities by CVE ID</h2>
+<ol>
+    <li>The CVE ID is provided by the user.</li>
+    <li>The CVE ID is sent to the <code>/assess-vulnerability</code> endpoint of the Security API.</li>
+    <li>The Security API queries the NVD to retrieve information about the CVE.</li>
+    <li>Returns vulnerability assessment information to the user.</li>
+</ol>
 
-- *Assess SBOM Risk:*
-  - Buyers send SBOM data to the /assess_sbom_risk/ endpoint.
-  - The API forwards the SBOM data to the Integration Agent.
-  - The Integration Agent uses the Security Agent API to evaluate the risk.
-  - The risk assessment results are returned to the buyer.
-
-## IntegrationAgent
-
-- *Check API Status:*
-  - *Endpoint:* /
-  - *Function:* Returns a simple message greet to confirm the API is working.
-
-- *Get SBOM:*
-  - *Endpoint:* /get_sbom
-  - *Function:* Receives a request with a product_id and forwards it to the Vendor API to retrieve the SBOM. Returns the response from the Vendor API.
-
-- *Access SBOM:*
-  - *Endpoint:* /acess_sbom
-  - *Function:* Receives SBOM JSON data from the buyer and forwards it to the Security API for vulnerability analysis. Returns the analysis results from the Security API.
-
-
-## VendorAgent
-
-Here's a breakdown of how the FastAPI application works:
-
-- *Generate SBOM:*
-  - *Endpoint:* /generate-sbom/
-  - *Function:* Generates a Software Bill of Materials (SBOM) for a specific JAR file based on the product_id provided.
-  - *Process:*
-    - Receives a product_id in the request.
-    - Maps product_id to a specific JAR file path.
-    - Checks if the file exists at the specified location.
-    - Calls the generate_sbom() function to generate the SBOM using the syft tool.
-    - Returns the SBOM data in JSON format.
-
-- *Acknowledge Fix Request:*
-  - *Endpoint:* /acknowledge-fix-request/
-  - *Function:* Acknowledges a request to fix vulnerabilities for a specific product.
-  - *Process:*
-    - Receives product_id and vulnerability_ids in the request.
-    - Logs the fix request (simulates interaction with a database or external service).
-    - Returns a confirmation message indicating successful acknowledgment.
-
-- *Update Product Status:*
-  - *Endpoint:* /update-product-status/
-  - *Function:* Updates the status of a product in an in-memory dictionary.
-  - *Process:*
-    - Receives product_id and status in the request.
-    - Updates the product status in an in-memory dictionary (product_statuses).
-    - Logs the status update (simulates interaction with a database or external service).
-    - Returns a confirmation message indicating the status update.
-
-- **Utility Function - generate_sbom():**
-  - *Function:* Executes a syft command to generate an SBOM for a given package or container image.
-  - *Process:*
-    - Builds and runs a syft command with the specified package path and output format.
-    - Captures and parses the command output.
-    - Returns the SBOM data as a dictionary.
-
-## SecurityAgent
-
-- *Analyze SBOM Vulnerabilities:*
-  - *Endpoint:* /analyze_sbom_vulneribilitys/
-  - *Function:* Analyzes an SBOM by querying the NVD for vulnerabilities associated with CPE names found in the SBOM. Returns a list of vulnerabilities for each CPE.
-
-- *Assess Vulnerability:*
-  - *Endpoint:* /assess_vulnerability
-  - *Function:* Receives a specific CVE ID, queries the NVD for details about that vulnerability, and returns a detailed assessment including CVSS score and severity.
-
-- *Utility Functions:*
-  - **get_vulnerabilities_from_nvd(cpe_name):** Queries the NVD API for vulnerabilities related to a specific CPE name.
-  - **check_vulnerabilities(cpe):** Checks SBOM dependencies for known vulnerabilities and formats the results.
-  - **check_vulnerabilities_info(vulnerability, cveid):** Provides detailed information about a specific CVE, including CVSS scores and severity metrics.
-
-
-
-
-
-## fixAgent
-- Prioritize Fixes:
-  - *Endpoint:* /prioritize_fixes
-  - *Function:* Prioritizes vulnerabilities based on IDs and returns their priority.
-
-- *Generate Fix Plan:* 
-  - *Endpoint:* /generate_fix_plan
-  - *Function:* Creates a fix plan with actions and timelines for each vulnerability.
-
-- *Generate VEX Document:* 
-  - *Endpoint:* /generate_vex
-  - *Function:* Produces a VEX document listing vulnerabilities and their fix status.
-
-- *Update SBOM:* 
-  - *Endpoint:* /update_sbom
-  - *Function:* Updates an SBOM with the applied fixes and returns the updated version.
-
-
-
-*Additional Details:*
-- *Error Handling:* The application raises HTTPException with appropriate status codes and error messages if there are issues during file generation, parsing, or other processes.
-- *Logging:* Simulated logging is done using print() statements for demonstration purposes. In a production environment, proper logging should be used.
-#   s b o m _ r a g  
- 
+</body>
+</html>
